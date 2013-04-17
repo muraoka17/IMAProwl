@@ -45,6 +45,7 @@ class IMAProwl
     @pass = conf['Pass']
     @host = conf['Host']
     @port = conf['Port'] ? conf['Port'] : 993
+    @use_ssl = conf.has_key?('UseSSL') ? conf['UseSSL'] : true
     @mailbox = conf['MailBox'] ? conf['MailBox'] : "INBOX"
     # backward compat
     @timeout = conf['Timeout'] ? conf['Timeout'] : ( conf['Interval'] ? conf['Interval'] : 20 )
@@ -239,7 +240,7 @@ class IMAProwl
   def connect
     @logged_in = false
     begin
-      @imap = Net::IMAP.new( @host, @port, true, nil, false ) # don't verify cert
+      @imap = Net::IMAP.new( @host, @port, @use_ssl, nil, false ) # don't verify cert
     rescue
       error "Error on connect()"
     end
